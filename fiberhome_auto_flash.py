@@ -3005,6 +3005,7 @@ FILE_MAP_STATIC = [
     ("    │   └── ",     "ponwrt-*-sysupgrade.itb",        "PonWrt 系统固件", False),
     ("    ├── ",         "info/",                          "设备信息归档【自动生成】", True),
     ("    │   └── ",     "deviceinfo_<MAC>.txt",           "GetDevInfo + 分区表 + 闪存信息", False),
+    ("    │   └── ",     "flash_menu<N>_<MAC>_<时间>.log", "[7]/[8]/[9] 刷成功的全流程日志", False),
     ("    └── ",         "backup_mtd/",                    "分区备份【自动生成】", True),
     ("        └── ",     "<光猫MAC>/",                     "每台光猫一个目录", True),
     ("            ├── ", "mtdN-<分区名>.bin",              "各分区原始备份（带 MD5 校验）", False),
