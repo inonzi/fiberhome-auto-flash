@@ -1,0 +1,84 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version, e.g. v3.0'
+        required: true
+        default: 'v3.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve version
+        id: ver
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $v = "${{ github.event.inputs.version }}"
+          } else {
+            $v = "${{ github.ref_name }}"
+          }
+          if (-not $v.StartsWith("v")) { $v = "v$v" }
+          echo "version=$v" >> $env:GITHUB_OUTPUT
+          echo "Resolved version: $v"
+
+      - name: Create tag for manual run
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.ver.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag $tag
+          git push origin $tag
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build EXE
+        shell: pwsh
+        run: |
+          pyinstaller --clean --onefile --name FiberHomeAutoFlash-${{ steps.ver.outputs.version }} `
+            --icon "fhtool.ico" `
+            --hidden-import Crypto `
+            --hidden-import Crypto.Cipher.AES `
+            --hidden-import Crypto.Util.Padding `
+            "fiberhome_auto_flash.py"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FiberHomeAutoFlash-${{ steps.ver.outputs.version }}
+          path: dist/FiberHomeAutoFlash-${{ steps.ver.outputs.version }}.exe
+
+      - name: Auto Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.version }}
+          name: FiberHome AutoFlash ${{ steps.ver.outputs.version }}
+          files: dist/FiberHomeAutoFlash-${{ steps.ver.outputs.version }}.exe
+          generate_release_notes: true
+          draft: false
+          prerelease: false
