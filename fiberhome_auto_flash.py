@@ -2988,7 +2988,7 @@ MAP_COL = 46   # 用途说明的起始列
 # (缩进, 名称, 用途, 是否目录)  —— 纯静态说明，与实际文件无关
 FILE_MAP_STATIC = [
     ("",                 "程序根目录/",                    "放哪都行：桌面 / D 盘 / U 盘，中文路径也可以", True),
-    ("├── ",             "fiberhome_tool.py",              "主程序（打包后为同名 .exe）", False),
+    ("├── ",             "FiberHomeAutoFlash.exe",                    "主程序", False),
     ("├── ",             "files_sha256.json",              "官方 SHA256 校验表【自动生成】", False),
     ("├── ",             "tools/",                         "依赖工具目录（[P] 会下载到这里）", True),
     ("│   ├── ",         "an758x-stock2ubi",               "Stock2UBI 服务端：分区备份 / 刷引导（3333）", False),
