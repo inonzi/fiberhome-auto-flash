@@ -1507,7 +1507,7 @@ def print_flash_info(info):
 
     print()
     line("─", 76, "cyan")
-    print(paint("  SPI NAND FLASH", "bold", "cyan"))
+    print(paint("  NAND FLASH", "bold", "cyan"))
     line("─", 76, "cyan")
     print(f"  【芯片型号】 : {paint(info['chip'], 'white', 'bold')}")
     print(f"  【芯片厂商】 : {paint(info['vendor'], 'white', 'bold')}")
@@ -1521,7 +1521,7 @@ def run_flash_info():
     tn, pc_ip = connect_telnet()
     if not tn: return
 
-    Logger.info("正在读取 SPI NAND 闪存信息...")
+    Logger.info("正在读取 NAND 闪存信息...")
     tn.write(b"cat /proc/driver/spi_nand_debug\n")
     time.sleep(1.0)
     raw = tn.read_all(wait_time=0.5).decode('ascii', errors='ignore')
@@ -1529,7 +1529,7 @@ def run_flash_info():
     raw = raw.replace("cat /proc/driver/spi_nand_debug", "").replace("\r", "")
 
     if "No such file" in raw or "not found" in raw:
-        Logger.error("设备上不存在 /proc/driver/spi_nand_debug，可能不是 SPI NAND 机型。")
+        Logger.error("设备上不存在 /proc/driver/spi_nand_debug，可能不是 NAND 机型。")
         return
 
     info = parse_flash_info(raw)
@@ -2732,12 +2732,12 @@ def run_uboot_flash(auto_mode=False):
 
 # ================= 原厂到PonWrt 一键刷机 =================
 def run_ultimate_flash():
-    """菜单 9：原厂到 OpenWrt 一键刷机"""
+    """菜单 9：原厂到 PonWrt 一键刷机"""
     global CURRENT_MODEL, CURRENT_FACTORY_BIN
     clear()
     print()
     line("═", 76, "red")
-    print(paint("  [!] 原厂到PonWrt 一键刷机向导 (原厂直通 OpenWrt) [!]", "red", "bold"))
+    print(paint("  [!] 原厂到PonWrt 一键刷机向导 [!]", "red", "bold"))
     print("  此操作将全自动执行：原厂备份 -> 刷入引导 -> 等待重启 -> 刷入系统。")
     line("═", 76, "red")
 
@@ -2865,7 +2865,7 @@ def run_ultimate_flash():
         return False
     print()
     line("═", 76, "green")
-    Logger.success(" 原厂到PonWrt 一键刷机全部完成！设备已重启进入 OpenWrt！")
+    Logger.success(" 原厂到PonWrt 一键刷机全部完成！设备已重启进入 PonWrt！")
     line("═", 76, "green")
 
     # 提示恢复网卡
@@ -3224,17 +3224,17 @@ def draw_menu(warning=None, use_cache_only=False):
     if CURRENT_VIEW == "FLASH":
         print(paint("  FLASHING SUPPORT (刷机辅助)", "bold", "white"))
         line("─", 76)
-        print(f"  {paint('[P] ', 'cyan', 'bold')}   {paint(pad_text('下载依赖（联网）', 24), 'white', 'bold')} {paint('选择机型所需工具、正式/临时引导及系统固件', 'gray')}")
+        print(f"  {paint('[P] ', 'cyan', 'bold')}   {paint(pad_text('下载依赖（联网）', 24), 'white', 'bold')} {paint('', 'gray')}")
         line("─", 76)
         print(f"  {paint('[1] ', 'cyan', 'bold')}   {paint(pad_text('网络配置', 24), 'white', 'bold')} {paint('自动配置 1.10 / 0.10 双 IP', 'gray')}")
         print(f"  {paint('[2] ', 'cyan', 'bold')}   {paint(pad_text('选择当前机型', 24), 'white', 'bold')} {paint('切换当前要操作的设备型号', 'gray')}")
         print(f"  {paint('[3] ', 'cyan', 'bold')}   {paint(pad_text('开启 Telnet', 24), 'white', 'bold')} {paint('开启并推算登录 / 提权信息', 'gray')}")
-        print(f"  {paint('[4] ', 'cyan', 'bold')}   {paint(pad_text('检测闪存信息', 24), 'white', 'bold')} {paint('读取 SPI NAND 芯片型号与容量', 'gray')}")
-        print(f"  {paint('[5] ', 'cyan', 'bold')}   {paint(pad_text('启动 Stock2UBI 服务', 24), 'white', 'bold')} {paint('启动刷机环境（网页手动备份/刷写引导）', 'gray')}")
-        print(f"  {paint('[6] ', 'cyan', 'bold')}   {paint(pad_text('Stock2UBI 极速备份', 24), 'white', 'bold')} {paint('自动备份所有分区并校验 MD5', 'gray')}")
-        print(f"  {paint('[7] ', 'cyan', 'bold')}   {paint(pad_text('Stock2UBI 一键刷引导', 24), 'white', 'bold')} {paint('自动判别闪存、强制备份并安全刷入引导', 'gray')}")
-        print(f"  {paint('[8] ', 'cyan', 'bold')}   {paint(pad_text('UBOOT 一键刷固件', 24), 'white', 'bold')} {paint('在 U-Boot 页面下全自动刷入引导、固件与数据', 'gray')}")
-        print(f"  {paint('[9] ', 'cyan', 'bold')}   {paint(pad_text('一键原厂到PonWrt', 24), 'white', 'bold')} {paint('原厂直通 PonWrt (自动完成 [7] 和 [8] 的流程)', 'gray')}")
+        print(f"  {paint('[4] ', 'cyan', 'bold')}   {paint(pad_text('检测闪存信息', 24), 'white', 'bold')} {paint('Telnet→读取 NAND 型号与容量', 'gray')}")
+        print(f"  {paint('[5] ', 'cyan', 'bold')}   {paint(pad_text('启动 Stock2UBI 服务', 24), 'white', 'bold')} {paint('Telnet→上传文件→启动服务', 'gray')}")
+        print(f"  {paint('[6] ', 'cyan', 'bold')}   {paint(pad_text('Stock2UBI 极速备份', 24), 'white', 'bold')} {paint('Telnet→拉服务→备份分区（校验 MD5）', 'gray')}")
+        print(f"  {paint('[7] ', 'cyan', 'bold')}   {paint(pad_text('Stock2UBI 一键刷引导', 24), 'white', 'bold')} {paint('Telnet→拉服务→判别闪存→备份→刷bl2/bl31', 'gray')}")
+        print(f"  {paint('[8] ', 'cyan', 'bold')}   {paint(pad_text('UBOOT 一键刷固件', 24), 'white', 'bold')} {paint('重建UBI→bl2/bl31→固件→板级数据→启动', 'gray')}")
+        print(f"  {paint('[9] ', 'cyan', 'bold')}   {paint(pad_text('一键原厂到 PonWrt', 24), 'white', 'bold')} {paint('原厂直通 PonWrt 全流程', 'gray')}")
         print(f"  {paint('[G] ', 'cyan', 'bold')}   {paint(pad_text('刷机指引（手动） ', 24), 'white', 'bold')} {paint('查看完整刷机步骤与异常排查', 'gray')}")
         print()
         line("─", 76)
