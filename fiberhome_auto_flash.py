@@ -3224,7 +3224,7 @@ def draw_menu(warning=None, use_cache_only=False):
     if CURRENT_VIEW == "FLASH":
         print(paint("  FLASHING SUPPORT (刷机辅助)", "bold", "white"))
         line("─", 76)
-        print(f"  {paint('[P] ', 'cyan', 'bold')}   {paint(pad_text('下载依赖（联网）', 24), 'white', 'bold')} {paint('', 'gray')}")
+        print(f"  {paint('[P] ', 'cyan', 'bold')}   {paint(pad_text('下载依赖（联网）', 24), 'white', 'bold')} {paint('选择机型所需工具、正式/临时引导及系统固件', 'gray')}")
         line("─", 76)
         print(f"  {paint('[1] ', 'cyan', 'bold')}   {paint(pad_text('网络配置', 24), 'white', 'bold')} {paint('自动配置 1.10 / 0.10 双 IP', 'gray')}")
         print(f"  {paint('[2] ', 'cyan', 'bold')}   {paint(pad_text('选择当前机型', 24), 'white', 'bold')} {paint('切换当前要操作的设备型号', 'gray')}")
